@@ -72,7 +72,9 @@ namespace My_Portrfolio_86
         protected void btnLogout_Click(object sender, EventArgs e)
         {
             Session.Clear();
-            Response.Redirect("AdminLogin.aspx");
+            Session.Abandon();
+            Response.Redirect("Default.aspx");
         }
+
     }
 }

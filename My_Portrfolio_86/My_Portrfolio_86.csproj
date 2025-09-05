@@ -80,6 +80,7 @@
     <Content Include="IndexWebForm.aspx" />
     <Content Include="Styles\site.css" />
     <Content Include="Web.config" />
+    <Content Include=".gitignore" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddProject.aspx.cs">

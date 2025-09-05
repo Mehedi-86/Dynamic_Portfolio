@@ -11,42 +11,9 @@ namespace My_Portrfolio_86
         {
             if (!IsPostBack)
             {
-                // Show login panel if admin is not logged in
-                pnlLogin.Visible = Session["AdminLoggedIn"] == null;
-
                 LoadAbout();
                 LoadSkills();
                 LoadProjects();
-            }
-        }
-
-        protected void btnLogin_Click(object sender, EventArgs e)
-        {
-            string username = txtUsername.Text.Trim();
-            string password = txtPassword.Text.Trim(); // For production, use hashed password
-
-            string connStr = ConfigurationManager.ConnectionStrings["PortfolioDB"].ConnectionString;
-            using (SqlConnection conn = new SqlConnection(connStr))
-            {
-                conn.Open();
-                string query = "SELECT COUNT(*) FROM Admins WHERE Username=@Username AND PasswordHash=@Password";
-                using (SqlCommand cmd = new SqlCommand(query, conn))
-                {
-                    cmd.Parameters.AddWithValue("@Username", username);
-                    cmd.Parameters.AddWithValue("@Password", password);
-
-                    int count = (int)cmd.ExecuteScalar();
-                    if (count == 1)
-                    {
-                        Session["AdminLoggedIn"] = true;
-                        pnlLogin.Visible = false;
-                        lblError.Text = "";
-                    }
-                    else
-                    {
-                        lblError.Text = "Invalid username or password!";
-                    }
-                }
             }
         }
 

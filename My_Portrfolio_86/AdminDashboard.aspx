@@ -27,7 +27,7 @@
             <!-- About Section -->
             <div class="section">
                 <h3>About Section</h3>
-                <a href="AddAbout.aspx" class="add-new">+ Add New</a>
+               
                 <asp:Repeater ID="rptAbout" runat="server">
                     <HeaderTemplate>
                         <table>
@@ -39,8 +39,8 @@
                             <td><%# Eval("Description") %></td>
                             <td><%# Eval("ProfileImage") %></td>
                             <td>
-                                <a href='EditAbout.aspx?Id=<%# Eval("Id") %>'>Edit</a> | 
-                                <a href='DeleteAbout.aspx?Id=<%# Eval("Id") %>' onclick="return confirm('Are you sure to delete?');">Delete</a>
+                                <a href='EditAbout.aspx?Id=<%# Eval("Id") %>'>Edit</a>  
+                               
                             </td>
                         </tr>
                     </ItemTemplate>
