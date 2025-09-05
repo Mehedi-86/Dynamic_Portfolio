@@ -51,13 +51,22 @@ namespace My_Portrfolio_86
         protected global::System.Web.UI.WebControls.TextBox txtDescription;
 
         /// <summary>
-        /// txtProfileImage control.
+        /// imgCurrent control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtProfileImage;
+        protected global::System.Web.UI.WebControls.Image imgCurrent;
+
+        /// <summary>
+        /// fuProfileImage control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.FileUpload fuProfileImage;
 
         /// <summary>
         /// btnSave control.

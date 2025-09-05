@@ -1,6 +1,7 @@
 ﻿using System;
-using System.Data.SqlClient;
 using System.Configuration;
+using System.Data.SqlClient;
+using System.IO;
 
 namespace My_Portrfolio_86
 {
@@ -38,7 +39,8 @@ namespace My_Portrfolio_86
                 {
                     txtFullName.Text = reader["FullName"].ToString();
                     txtDescription.Text = reader["Description"].ToString();
-                    txtProfileImage.Text = reader["ProfileImage"].ToString();
+                    imgCurrent.ImageUrl = reader["ProfileImage"].ToString();
+                    ViewState["OldImage"] = reader["ProfileImage"].ToString();
                 }
             }
         }
@@ -47,7 +49,7 @@ namespace My_Portrfolio_86
         {
             string fullName = txtFullName.Text.Trim();
             string description = txtDescription.Text.Trim();
-            string profileImage = txtProfileImage.Text.Trim();
+            string newImagePath = ViewState["OldImage"].ToString();
 
             if (string.IsNullOrEmpty(fullName) || string.IsNullOrEmpty(description))
             {
@@ -55,6 +57,26 @@ namespace My_Portrfolio_86
                 return;
             }
 
+            // Handle new image upload
+            if (fuProfileImage.HasFile)
+            {
+                string folderPath = Server.MapPath("~/Uploads/");
+                if (!Directory.Exists(folderPath))
+                    Directory.CreateDirectory(folderPath);
+
+                string fileName = Guid.NewGuid().ToString() + Path.GetExtension(fuProfileImage.FileName);
+                string savePath = Path.Combine(folderPath, fileName);
+                fuProfileImage.SaveAs(savePath);
+
+                newImagePath = "~/Uploads/" + fileName;
+
+                // Delete old image
+                string oldFile = Server.MapPath(ViewState["OldImage"].ToString());
+                if (File.Exists(oldFile))
+                    File.Delete(oldFile);
+            }
+
+            // Update DB
             string connStr = ConfigurationManager.ConnectionStrings["PortfolioDB"].ConnectionString;
             using (SqlConnection conn = new SqlConnection(connStr))
             {
@@ -62,7 +84,7 @@ namespace My_Portrfolio_86
                 SqlCommand cmd = new SqlCommand(query, conn);
                 cmd.Parameters.AddWithValue("@FullName", fullName);
                 cmd.Parameters.AddWithValue("@Description", description);
-                cmd.Parameters.AddWithValue("@ProfileImage", profileImage);
+                cmd.Parameters.AddWithValue("@ProfileImage", newImagePath);
                 cmd.Parameters.AddWithValue("@Id", aboutId);
                 conn.Open();
                 cmd.ExecuteNonQuery();

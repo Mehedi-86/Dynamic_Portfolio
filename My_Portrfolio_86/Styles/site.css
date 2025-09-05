@@ -1,35 +1,47 @@
-﻿/* General Styles */
+﻿/* ===== General Styles ===== */
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: #111;
-    color: #fff;
+    color: #f0f0f0;
+    scroll-behavior: smooth;
 }
 
-/* Navbar */
+a {
+    color: #ffbd39;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+    a:hover {
+        color: #fff;
+    }
+
+/* ===== Navbar ===== */
 .navbar {
     display: flex;
     justify-content: center;
-    gap: 20px;
-    padding: 15px;
-    background: #222;
+    gap: 30px;
+    padding: 15px 0;
+    background: #1a1a1a;
     position: fixed;
     width: 100%;
     top: 0;
     z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.5);
 }
 
     .navbar a {
-        color: white;
-        text-decoration: none;
         font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 1px;
     }
 
         .navbar a:hover {
             color: #ffbd39;
         }
 
-/* Section Spacing */
+/* ===== Section Spacing ===== */
 section {
     padding: 100px 20px 60px 20px;
 }
@@ -37,75 +49,183 @@ section {
 h2 {
     color: #ffbd39;
     margin-bottom: 20px;
+    font-size: 28px;
+    text-align: center;
 }
 
-/* About Section */
+/* ===== About Section ===== */
 #about {
     text-align: center;
 }
 
 .profile-pic {
-    border-radius: 50%;
+    border-radius: 75%; /* more circular */
     width: 150px;
+    height: 150px;
+    object-fit: cover;
     margin-bottom: 20px;
+    border: 3px solid #ffbd39; /* keep border same */
+    box-shadow: 0 4px 15px rgba(255, 189, 57, 0.5);
 }
 
-/* Skills Section */
+#about p {
+    max-width: 700px;
+    margin: 0 auto;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+/* ===== Skills Section ===== */
 .skill-bar {
-    margin-bottom: 15px;
+    margin-bottom: 20px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.skill-name {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+    font-weight: bold;
 }
 
 .progress {
     width: 100%;
-    background: #444;
-    height: 8px;
-    border-radius: 5px;
+    background: #222;
+    height: 12px;
+    border-radius: 6px;
     overflow: hidden;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
 }
 
 .progress-fill {
-    height: 8px;
+    height: 100%;
     background: #ffbd39;
-    border-radius: 5px;
+    border-radius: 6px;
+    width: 0;
+    transition: width 1s ease-in-out;
 }
 
-/* Projects Section */
+/* ===== Projects Section ===== */
 .projects-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
+    gap: 25px;
     justify-content: center;
+    margin-top: 30px;
 }
 
 .project-card {
-    background: #222;
-    padding: 15px;
-    border-radius: 10px;
+    background: #1a1a1a;
+    padding: 20px;
+    border-radius: 12px;
     width: 300px;
     text-align: center;
-    transition: transform 0.3s ease;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
     .project-card img {
         width: 100%;
         border-radius: 10px;
+        margin-bottom: 10px;
     }
 
     .project-card h3 {
         margin: 10px 0 5px 0;
+        font-size: 20px;
+        color: #ffbd39;
     }
 
     .project-card p {
         font-size: 14px;
-        line-height: 1.4;
+        line-height: 1.5;
+        color: #ccc;
     }
 
     .project-card a {
-        color: #ffbd39;
-        text-decoration: none;
         font-weight: bold;
     }
 
     .project-card:hover {
-        transform: scale(1.05);
+        transform: translateY(-5px) scale(1.03);
+        box-shadow: 0 8px 25px rgba(255, 189, 57, 0.5);
     }
+
+/* ===== Buttons ===== */
+button, .add-new {
+    display: inline-block;
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    background: #ffbd39;
+    color: #111;
+    transition: 0.3s;
+}
+
+    button:hover, .add-new:hover {
+        background: #fff;
+        color: #000;
+    }
+
+/* ===== Tables ===== */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background: #1a1a1a;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+}
+
+th, td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #333;
+    text-align: left;
+}
+
+th {
+    background: #222;
+    color: #ffbd39;
+    text-transform: uppercase;
+    font-size: 14px;
+}
+
+tr:hover {
+    background: #33334d;
+}
+
+img.table-img {
+    max-width: 100px;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+}
+
+/* ===== Responsive ===== */
+@media screen and (max-width: 768px) {
+    section {
+        padding: 80px 15px 40px 15px;
+    }
+
+    .projects-container {
+        gap: 15px;
+    }
+
+    .project-card {
+        width: 90%;
+    }
+
+    .skill-bar {
+        max-width: 100%;
+    }
+
+    .navbar {
+        flex-direction: column;
+        gap: 15px;
+        padding: 10px 0;
+    }
+}

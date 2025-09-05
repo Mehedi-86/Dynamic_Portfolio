@@ -1,70 +1,96 @@
 ﻿using System;
-using System.Data.SqlClient;
 using System.Configuration;
+using System.Data.SqlClient;
+using System.IO;
 
 namespace My_Portrfolio_86
 {
     public partial class EditProject : System.Web.UI.Page
     {
-        int projectId = 0;
+        protected string oldImagePath = "";
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (Session["AdminLoggedIn"] == null)
-                Response.Redirect("AdminLogin.aspx");
-
-            if (!int.TryParse(Request.QueryString["Id"], out projectId))
-                Response.Redirect("AdminDashboard.aspx");
-
             if (!IsPostBack)
-                LoadProject();
-        }
-
-        private void LoadProject()
-        {
-            string connStr = ConfigurationManager.ConnectionStrings["PortfolioDB"].ConnectionString;
-            using (SqlConnection conn = new SqlConnection(connStr))
             {
-                string query = "SELECT * FROM Projects WHERE Id=@Id";
-                SqlCommand cmd = new SqlCommand(query, conn);
-                cmd.Parameters.AddWithValue("@Id", projectId);
-                conn.Open();
-                SqlDataReader reader = cmd.ExecuteReader();
-                if (reader.Read())
+                int projectId;
+                if (int.TryParse(Request.QueryString["Id"], out projectId))
                 {
-                    txtTitle.Text = reader["Title"].ToString();
-                    txtDescription.Text = reader["Description"].ToString();
-                    txtImageUrl.Text = reader["ImageUrl"].ToString();
-                    txtProjectLink.Text = reader["ProjectLink"].ToString();
+                    LoadProject(projectId);
                 }
             }
         }
 
-        protected void btnSave_Click(object sender, EventArgs e)
+        private void LoadProject(int projectId)
         {
-            string title = txtTitle.Text.Trim();
-            string description = txtDescription.Text.Trim();
-            string imageUrl = txtImageUrl.Text.Trim();
-            string projectLink = txtProjectLink.Text.Trim();
-
-            if (string.IsNullOrEmpty(title) || string.IsNullOrEmpty(description))
-            {
-                lblError.Text = "Title and Description are required!";
-                return;
-            }
-
             string connStr = ConfigurationManager.ConnectionStrings["PortfolioDB"].ConnectionString;
             using (SqlConnection conn = new SqlConnection(connStr))
             {
+                conn.Open();
+                string query = "SELECT * FROM Projects WHERE Id=@Id";
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@Id", projectId);
+
+                SqlDataReader reader = cmd.ExecuteReader();
+                if (reader.Read())
+                {
+                    hfProjectId.Value = reader["Id"].ToString();
+                    txtTitle.Text = reader["Title"].ToString();
+                    txtDescription.Text = reader["Description"].ToString();
+                    txtProjectLink.Text = reader["ProjectLink"].ToString();
+                    imgCurrent.ImageUrl = reader["ImageUrl"].ToString();
+
+                    oldImagePath = reader["ImageUrl"].ToString();
+                    ViewState["OldImage"] = oldImagePath; // store old path
+                }
+            }
+        }
+
+        protected void btnUpdate_Click(object sender, EventArgs e)
+        {
+            int projectId = int.Parse(hfProjectId.Value);
+            string title = txtTitle.Text.Trim();
+            string description = txtDescription.Text.Trim();
+            string projectLink = txtProjectLink.Text.Trim();
+
+            string newImagePath = ViewState["OldImage"].ToString(); // default keep old image
+
+            if (fuImage.HasFile)
+            {
+                // Save new image
+                string folderPath = Server.MapPath("~/Uploads/");
+                if (!Directory.Exists(folderPath))
+                {
+                    Directory.CreateDirectory(folderPath);
+                }
+
+                string fileName = Guid.NewGuid().ToString() + Path.GetExtension(fuImage.FileName);
+                string savePath = Path.Combine(folderPath, fileName);
+                fuImage.SaveAs(savePath);
+
+                newImagePath = "~/Uploads/" + fileName;
+
+                // Delete old image if exists
+                string oldFile = Server.MapPath(ViewState["OldImage"].ToString());
+                if (File.Exists(oldFile))
+                {
+                    File.Delete(oldFile);
+                }
+            }
+
+            // Update DB
+            string connStr = ConfigurationManager.ConnectionStrings["PortfolioDB"].ConnectionString;
+            using (SqlConnection conn = new SqlConnection(connStr))
+            {
+                conn.Open();
                 string query = "UPDATE Projects SET Title=@Title, Description=@Description, ImageUrl=@ImageUrl, ProjectLink=@ProjectLink WHERE Id=@Id";
                 SqlCommand cmd = new SqlCommand(query, conn);
                 cmd.Parameters.AddWithValue("@Title", title);
                 cmd.Parameters.AddWithValue("@Description", description);
-                cmd.Parameters.AddWithValue("@ImageUrl", imageUrl);
+                cmd.Parameters.AddWithValue("@ImageUrl", newImagePath);
                 cmd.Parameters.AddWithValue("@ProjectLink", projectLink);
                 cmd.Parameters.AddWithValue("@Id", projectId);
 
-                conn.Open();
                 cmd.ExecuteNonQuery();
             }
 
