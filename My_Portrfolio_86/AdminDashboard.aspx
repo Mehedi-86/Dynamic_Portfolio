@@ -24,7 +24,7 @@
             <h2>Admin Dashboard</h2>
             <asp:Button ID="btnLogout" runat="server" Text="Logout" CssClass="logout" OnClick="btnLogout_Click" />
 
-            <!-- About Section -->
+            <!-- About Section done-->
             <div class="section">
                 <h3>About Section</h3>
                
