@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data.SqlClient;
 using System.Configuration;
+using System.Web;
 
 namespace My_Portrfolio_86
 {
@@ -10,6 +11,12 @@ namespace My_Portrfolio_86
         {
             string username = txtUsername.Text.Trim();
             string password = txtPassword.Text.Trim();  // For production, hash this
+
+            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+            {
+                lblError.Text = "Username and password are required!";
+                return;
+            }
 
             string connStr = ConfigurationManager.ConnectionStrings["PortfolioDB"].ConnectionString;
 
@@ -25,9 +32,16 @@ namespace My_Portrfolio_86
                     int count = (int)cmd.ExecuteScalar();
                     if (count == 1)
                     {
-                        // Login successful
+                        // ✅ Session
                         Session["AdminLoggedIn"] = true;
-                        Session["AdminUsername"] = username;  // store username
+                        Session["AdminUsername"] = username;
+
+                        // ✅ Cookie (7 days)
+                        HttpCookie adminCookie = new HttpCookie("AdminUser");
+                        adminCookie.Value = username;
+                        adminCookie.Expires = DateTime.Now.AddDays(7);
+                        Response.Cookies.Add(adminCookie);
+
                         Response.Redirect("AdminDashboard.aspx");
                     }
                     else

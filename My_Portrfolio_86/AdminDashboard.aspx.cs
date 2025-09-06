@@ -2,6 +2,7 @@
 using System.Data;
 using System.Data.SqlClient;
 using System.Configuration;
+using System.Web;
 
 namespace My_Portrfolio_86
 {
@@ -9,10 +10,20 @@ namespace My_Portrfolio_86
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            // Check if admin is logged in
+            // ✅ Check session
             if (Session["AdminLoggedIn"] == null || !(bool)Session["AdminLoggedIn"])
             {
-                Response.Redirect("AdminLogin.aspx");
+                // ✅ Check cookie if session is missing
+                HttpCookie cookie = Request.Cookies["AdminUser"];
+                if (cookie != null)
+                {
+                    Session["AdminLoggedIn"] = true;
+                    Session["AdminUsername"] = cookie.Value;
+                }
+                else
+                {
+                    Response.Redirect("AdminLogin.aspx");
+                }
             }
 
             if (!IsPostBack)
@@ -20,7 +31,6 @@ namespace My_Portrfolio_86
                 // Show logged-in admin username
                 if (Session["AdminUsername"] != null)
                 {
-                    // Optional: Capitalize first letter
                     string username = Session["AdminUsername"].ToString();
                     lblAdminUser.Text = char.ToUpper(username[0]) + username.Substring(1);
                 }
@@ -29,6 +39,23 @@ namespace My_Portrfolio_86
                 LoadSkills();
                 LoadProjects();
             }
+        }
+
+        // Logout button click
+        protected void btnLogout_Click(object sender, EventArgs e)
+        {
+            Session.Clear();
+            Session.Abandon();
+
+            // Clear cookie
+            if (Request.Cookies["AdminUser"] != null)
+            {
+                HttpCookie cookie = new HttpCookie("AdminUser");
+                cookie.Expires = DateTime.Now.AddDays(-1); // expired
+                Response.Cookies.Add(cookie);
+            }
+
+            Response.Redirect("Default.aspx");
         }
 
         // Load About section
@@ -74,14 +101,6 @@ namespace My_Portrfolio_86
                 rptProjects.DataSource = dt;
                 rptProjects.DataBind();
             }
-        }
-
-        // Logout button click
-        protected void btnLogout_Click(object sender, EventArgs e)
-        {
-            Session.Clear();
-            Session.Abandon();
-            Response.Redirect("Default.aspx");
         }
     }
 }
