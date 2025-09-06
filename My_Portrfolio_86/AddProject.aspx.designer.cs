@@ -51,13 +51,13 @@ namespace My_Portrfolio_86
         protected global::System.Web.UI.WebControls.TextBox txtDescription;
 
         /// <summary>
-        /// txtImageUrl control.
+        /// fuProjectImage control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtImageUrl;
+        protected global::System.Web.UI.WebControls.FileUpload fuProjectImage;
 
         /// <summary>
         /// txtProjectLink control.

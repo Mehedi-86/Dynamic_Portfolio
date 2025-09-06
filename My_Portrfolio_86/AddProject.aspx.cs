@@ -16,7 +16,35 @@ namespace My_Portrfolio_86
         {
             string title = txtTitle.Text.Trim();
             string description = txtDescription.Text.Trim();
-            string imageUrl = txtImageUrl.Text.Trim();
+            string imageUrl = "";
+
+            if (fuProjectImage.HasFile)
+            {
+                // Optional: check file extension
+                string ext = System.IO.Path.GetExtension(fuProjectImage.FileName).ToLower();
+                if (ext != ".jpg" && ext != ".jpeg" && ext != ".png" && ext != ".gif")
+                {
+                    lblError.Text = "Only image files (.jpg, .jpeg, .png, .gif) are allowed.";
+                    return;
+                }
+
+                string folderPath = Server.MapPath("~/Images/Projects/");
+                if (!System.IO.Directory.Exists(folderPath))
+                {
+                    System.IO.Directory.CreateDirectory(folderPath);
+                }
+
+                string fileName = System.IO.Path.GetFileName(fuProjectImage.FileName);
+                fuProjectImage.SaveAs(System.IO.Path.Combine(folderPath, fileName));
+
+                imageUrl = "Images/Projects/" + fileName;
+            }
+            else
+            {
+                lblError.Text = "Please select an image to upload.";
+                return;
+            }
+
             string projectLink = txtProjectLink.Text.Trim();
 
             if (string.IsNullOrEmpty(title) || string.IsNullOrEmpty(description))

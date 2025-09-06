@@ -27,7 +27,8 @@
             <asp:Label ID="lblError" runat="server" CssClass="error" />
             <asp:TextBox ID="txtTitle" runat="server" Placeholder="Project Title" />
             <asp:TextBox ID="txtDescription" runat="server" TextMode="MultiLine" Rows="4" Placeholder="Project Description" />
-            <asp:TextBox ID="txtImageUrl" runat="server" Placeholder="Image URL" />
+            <p>Upload Project Image:</p>
+             <asp:FileUpload ID="fuProjectImage" runat="server" />
             <asp:TextBox ID="txtProjectLink" runat="server" Placeholder="Project Link" />
             <asp:Button ID="btnSave" runat="server" Text="Add Project" OnClick="btnSave_Click" />
         </div>
