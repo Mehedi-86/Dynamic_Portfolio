@@ -27,6 +27,7 @@ namespace My_Portrfolio_86
                     {
                         // Login successful
                         Session["AdminLoggedIn"] = true;
+                        Session["AdminUsername"] = username;  // store username
                         Response.Redirect("AdminDashboard.aspx");
                     }
                     else
@@ -35,6 +36,11 @@ namespace My_Portrfolio_86
                     }
                 }
             }
+        }
+
+        protected void btnRegister_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("AdminRegister.aspx");
         }
     }
 }

@@ -33,6 +33,14 @@ body {
     padding-bottom: 10px;
 }
 
+.dashboard-header {
+    display: flex;
+    justify-content: space-between; /* h2 left, button right */
+    align-items: center;           /* vertically align */
+    padding: 10px 20px;            /* optional spacing */
+    background-color: #2a2a3d;     
+    border-radius: 8px;            /* optional styling */
+}
 
 .logout {
     float: right;
@@ -187,6 +195,7 @@ img {
 <body>
     <form id="form1" runat="server">
        <div class="dashboard">
+           <div class="dashboard-header">
             <h2>Admin Dashboard</h2>
             <asp:Button 
                 ID="btnLogout" 
@@ -195,6 +204,8 @@ img {
                 CssClass="logout" 
                 OnClientClick="return confirm('Are you sure you want to logout?');" 
                 OnClick="btnLogout_Click" />
+        </div>
+           <h3 style="text-align:center;">Welcome, <asp:Label ID="lblAdminUser" runat="server" CssClass="admin-user"></asp:Label> 👋</h3>
 
             <!-- About Section -->
             <div class="section">

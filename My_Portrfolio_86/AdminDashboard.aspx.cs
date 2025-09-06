@@ -10,13 +10,21 @@ namespace My_Portrfolio_86
         protected void Page_Load(object sender, EventArgs e)
         {
             // Check if admin is logged in
-            if (Session["AdminLoggedIn"] == null)
+            if (Session["AdminLoggedIn"] == null || !(bool)Session["AdminLoggedIn"])
             {
                 Response.Redirect("AdminLogin.aspx");
             }
 
             if (!IsPostBack)
             {
+                // Show logged-in admin username
+                if (Session["AdminUsername"] != null)
+                {
+                    // Optional: Capitalize first letter
+                    string username = Session["AdminUsername"].ToString();
+                    lblAdminUser.Text = char.ToUpper(username[0]) + username.Substring(1);
+                }
+
                 LoadAbout();
                 LoadSkills();
                 LoadProjects();
@@ -75,6 +83,5 @@ namespace My_Portrfolio_86
             Session.Abandon();
             Response.Redirect("Default.aspx");
         }
-
     }
 }
